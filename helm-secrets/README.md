@@ -44,3 +44,41 @@ data:
 ## Script
 
 Run command: `kubectl -n argocd apply -f argocd-mods.yml`
+
+# Configuring argocd
+
+## Create age key
+
+Run command: `age-keygen -o key.txt`
+
+Note: `key.txt` will contain the public key used to encrypt
+
+## Add key to k8s
+
+Run command: `kubectl create secret generic helm-secrets-private-keys --from-file=key.txt`
+
+## Manually modify
+
+```yaml
+repoServer:
+  volumes:
+    - name: helm-secrets-private-keys
+      secret:
+        secretName: helm-secrets-private-keys
+
+  volumeMounts:
+    - mountPath: /helm-secrets-private-keys/
+      name: helm-secrets-private-keys
+
+```
+
+## Script
+
+Run command: `kubectl -n argocd apply -f argocd-repo-secret.yml`
+
+# Encrypt data
+
+Run command: `sops --encrypt --age [age-public-key] [input-file] > [output-file]`
+
+Example: `sops --encrypt --age age123 test.yaml > test.enc.yaml`
+ 
