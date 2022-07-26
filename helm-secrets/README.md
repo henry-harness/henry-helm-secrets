@@ -82,3 +82,24 @@ Run command: `sops --encrypt --age [age-public-key] [input-file] > [output-file]
 
 Example: `sops --encrypt --age age123 test.yaml > test.enc.yaml`
  
+# Using secrets in argocd
+
+## your helm chart
+When creating helm chart, put all your encrypted secrets in `secrets.yaml`.
+
+For reference, `secrets.yaml` and `values.yaml` are at the same level.
+
+![file-tree](../images/file-tree.png)
+
+
+## Creating app in gitops-ui
+
+Create an app and add `values.yaml`.
+
+After successfully adding `values.yaml`, go to the `App Details` screen and manually add the secrets.
+
+![add secrets to app](../images/add-secrets-to-argo-app.png)
+
+Save changes, and sync.
+
+
